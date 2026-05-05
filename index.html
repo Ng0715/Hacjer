@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>iTech Cinematic System</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: #00ff88;
+  font-family: monospace;
+  overflow: hidden;
+}
+
+/* CRT 扫描线 */
+body::after {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.2) 0px,
+    rgba(0,0,0,0.2) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+/* 粒子背景 */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* Boot */
+#boot {
+  padding: 40px;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* 页面 */
+.page {
+  display: none;
+  text-align: center;
+  padding-top: 100px;
+}
+
+/* 发光 */
+.glow {
+  text-shadow: 0 0 15px #00ff88;
+}
+
+/* 大标题 */
+.big {
+  font-size: 50px;
+}
+
+/* 按钮 */
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  background: black;
+  color: #00ff88;
+  border: 1px solid #00ff88;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00ff88;
+  color: black;
+  box-shadow: 0 0 10px #00ff88;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.5;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div id="boot"></div>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page">
+  <h1 class="big glow">WELCOME TO iTECH CLUB</h1>
+  <p>Press ENTER to continue</p>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <h1 class="big glow">MISS IDA</h1>
+
+  <button onclick="showPage('sem4')">SEM 4</button>
+  <button onclick="showPage('sem3')">SEM 3</button>
+  <button onclick="showPage('sem2')">SEM 2</button>
+  <button onclick="showPage('sem1')">SEM 1</button>
+
+  <br><br>
+  <button onclick="showPage('page1')">⬅ BACK HOME</button>
+</div>
+
+<!-- SEM -->
+<div id="sem4" class="page">
+  <h1 class="glow">SEM 4</h1>
+  <p>Shi Le</p>
+  <button onclick="showPage('page2')">⬅ Back</button>
+</div>
+
+<div id="sem3" class="page">
+  <h1 class="glow">SEM 3</h1>
+  <p>Syaa</p>
+  <button onclick="showPage('page2')">⬅ Back</button>
+</div>
+
+<div id="sem2" class="page">
+  <h1 class="glow">SEM 2</h1>
+  <p>Coming Soon</p>
+  <button onclick="showPage('page2')">⬅ Back</button>
+</div>
+
+<div id="sem1" class="page">
+  <h1 class="glow">SEM 1</h1>
+  <p>Coming Soon</p>
+  <button onclick="showPage('page2')">⬅ Back</button>
+</div>
+
+<footer>© Happy Ng</footer>
+
+<script>
+// 🎬 Cinematic Boot Sequence
+const boot = document.getElementById("boot");
+
+const sequence = [
+  { text: "Initializing system...", delay: 800 },
+  { text: "Loading secure modules...", delay: 800 },
+  { text: "Establishing connection...", delay: 800 },
+  { text: "Decrypting data...", delay: 800 },
+  { text: "ACCESS GRANTED", delay: 1200, glitch: true }
+];
+
+let i = 0;
+
+function playLine() {
+  if (i >= sequence.length) {
+    setTimeout(() => fadeOutBoot(), 1000);
+    return;
+  }
+
+  const lineObj = sequence[i];
+  const line = document.createElement("div");
+  boot.appendChild(line);
+
+  let j = 0;
+
+  function typeChar() {
+    if (j < lineObj.text.length) {
+      line.innerHTML += lineObj.text[j];
+      j++;
+      setTimeout(typeChar, 40);
+    }
+  }
+
+  typeChar();
+
+  if (lineObj.glitch) {
+    setTimeout(() => glitchEffect(line), 400);
+  }
+
+  i++;
+  setTimeout(playLine, lineObj.delay);
+}
+
+function glitchEffect(el) {
+  el.style.color = "red";
+  setTimeout(() => el.style.color = "#00ff88", 100);
+  setTimeout(() => el.style.color = "red", 200);
+  setTimeout(() => el.style.color = "#00ff88", 300);
+}
+
+function fadeOutBoot() {
+  document.body.style.transition = "opacity 1s";
+  document.body.style.opacity = "0";
+
+  setTimeout(() => {
+    boot.style.display = "none";
+    document.body.style.opacity = "1";
+    showPage("page1");
+  }, 1000);
+}
+
+// 页面切换
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+
+// ⌨️ Enter 进入
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    if (document.getElementById("page1").style.display === "block") {
+      showPage("page2");
+    }
+  }
+});
+
+playLine();
+
+// 🌌 粒子背景
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 120; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2
+  });
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#00ff88";
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+}
+
+setInterval(draw, 30);
+</script>
+
+</body>
+</html>
