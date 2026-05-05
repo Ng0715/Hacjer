@@ -61,7 +61,17 @@ canvas {
   font-size: 50px;
 }
 
-/* 按钮 */
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+/* 按钮（SEM用） */
 button {
   padding: 12px 25px;
   margin: 10px;
@@ -76,16 +86,6 @@ button:hover {
   color: black;
   box-shadow: 0 0 10px #00ff88;
 }
-
-/* Footer */
-footer {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  opacity: 0.5;
-}
 </style>
 </head>
 
@@ -98,7 +98,7 @@ footer {
 <!-- PAGE 1 -->
 <div id="page1" class="page">
   <h1 class="big glow">WELCOME TO iTECH CLUB</h1>
-  <p>Press ENTER to continue</p>
+  <p>Press ENTER or TAP anywhere to continue</p>
 </div>
 
 <!-- PAGE 2 -->
@@ -142,54 +142,42 @@ footer {
 <footer>© Happy Ng</footer>
 
 <script>
-// 🎬 Cinematic Boot Sequence
+// 🎬 Boot Sequence
 const boot = document.getElementById("boot");
 
 const sequence = [
-  { text: "Initializing system...", delay: 800 },
-  { text: "Loading secure modules...", delay: 800 },
-  { text: "Establishing connection...", delay: 800 },
-  { text: "Decrypting data...", delay: 800 },
-  { text: "ACCESS GRANTED", delay: 1200, glitch: true }
+  "Initializing system...",
+  "Loading secure modules...",
+  "Establishing connection...",
+  "Decrypting data...",
+  "ACCESS GRANTED"
 ];
 
 let i = 0;
 
-function playLine() {
+function playBoot() {
   if (i >= sequence.length) {
     setTimeout(() => fadeOutBoot(), 1000);
     return;
   }
 
-  const lineObj = sequence[i];
-  const line = document.createElement("div");
+  let line = document.createElement("div");
   boot.appendChild(line);
 
+  let text = sequence[i];
   let j = 0;
 
   function typeChar() {
-    if (j < lineObj.text.length) {
-      line.innerHTML += lineObj.text[j];
+    if (j < text.length) {
+      line.innerHTML += text[j];
       j++;
       setTimeout(typeChar, 40);
     }
   }
 
   typeChar();
-
-  if (lineObj.glitch) {
-    setTimeout(() => glitchEffect(line), 400);
-  }
-
   i++;
-  setTimeout(playLine, lineObj.delay);
-}
-
-function glitchEffect(el) {
-  el.style.color = "red";
-  setTimeout(() => el.style.color = "#00ff88", 100);
-  setTimeout(() => el.style.color = "red", 200);
-  setTimeout(() => el.style.color = "#00ff88", 300);
+  setTimeout(playBoot, 700);
 }
 
 function fadeOutBoot() {
@@ -209,16 +197,53 @@ function showPage(id) {
   document.getElementById(id).style.display = "block";
 }
 
+// 💥 点击进入（手机+电脑）
+function enterSystem() {
+  flashEffect(() => {
+    showPage("page2");
+  });
+}
+
+document.addEventListener("click", () => {
+  if (document.getElementById("page1").style.display === "block") {
+    enterSystem();
+  }
+});
+
 // ⌨️ Enter 进入
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     if (document.getElementById("page1").style.display === "block") {
-      showPage("page2");
+      enterSystem();
     }
   }
 });
 
-playLine();
+// 💥 闪屏效果
+function flashEffect(callback) {
+  const flash = document.createElement("div");
+
+  flash.style.position = "fixed";
+  flash.style.top = 0;
+  flash.style.left = 0;
+  flash.style.width = "100%";
+  flash.style.height = "100%";
+  flash.style.background = "#00ff88";
+  flash.style.opacity = "0.8";
+  flash.style.zIndex = "999";
+
+  document.body.appendChild(flash);
+
+  setTimeout(() => {
+    flash.style.opacity = "0";
+    setTimeout(() => {
+      document.body.removeChild(flash);
+      callback();
+    }, 200);
+  }, 100);
+}
+
+playBoot();
 
 // 🌌 粒子背景
 const canvas = document.getElementById("bg");
