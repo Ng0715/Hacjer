@@ -29,62 +29,103 @@ body::after {
   pointer-events: none;
 }
 
-/* 粒子背景 */
-canvas {
-  position: fixed;
+/* 页面布局 */
+.page {
+  display: none;
+  height: 100vh;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* 标题动画 */
+.intro-title {
+  font-size: 70px;
+  opacity: 0;
+  transform: scale(0.6);
+  animation: zoomIn 1s ease forwards;
+}
+
+@keyframes zoomIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* MISS IDA glitch */
+.glitch-text {
+  font-size: 60px;
+  animation: glitchText 1.5s infinite;
+}
+
+@keyframes glitchText {
+  0% { text-shadow: 2px 0 red, -2px 0 blue; }
+  50% { text-shadow: -2px 0 red, 2px 0 blue; }
+  100% { text-shadow: none; }
+}
+
+/* 按钮扫描 */
+button {
+  padding: 12px 25px;
+  margin: 15px;
+  background: black;
+  color: #00ff88;
+  border: 1px solid #00ff88;
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: "";
+  position: absolute;
   top: 0;
-  left: 0;
-  z-index: -1;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(0,255,136,0.4), transparent);
+  transition: 0.5s;
+}
+
+button:hover::after {
+  left: 100%;
+}
+
+/* fade + glitch */
+.fade-out { opacity: 0; transition: 0.4s; }
+.fade-in { opacity: 1; transition: 0.4s; }
+
+.glitch {
+  animation: glitch 0.3s;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  30% { transform: translate(-5px,5px); }
+  60% { transform: translate(5px,-5px); }
+  100% { transform: translate(0); }
 }
 
 /* Boot */
 #boot {
   padding: 40px;
   font-size: 18px;
-  letter-spacing: 2px;
 }
 
-/* 页面 */
-.page {
-  display: none;
-  text-align: center;
-  padding-top: 100px;
+/* 粒子 */
+canvas {
+  position: fixed;
+  z-index: -1;
 }
 
-/* 发光 */
-.glow {
-  text-shadow: 0 0 15px #00ff88;
-}
-
-/* 大标题 */
-.big {
-  font-size: 50px;
-}
-
-/* Footer */
+/* footer */
 footer {
   position: fixed;
   bottom: 10px;
   width: 100%;
   text-align: center;
-  font-size: 12px;
   opacity: 0.5;
-}
-
-/* 按钮（SEM用） */
-button {
-  padding: 12px 25px;
-  margin: 10px;
-  background: black;
-  color: #00ff88;
-  border: 1px solid #00ff88;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #00ff88;
-  color: black;
-  box-shadow: 0 0 10px #00ff88;
 }
 </style>
 </head>
@@ -92,49 +133,47 @@ button:hover {
 <body>
 
 <canvas id="bg"></canvas>
-
 <div id="boot"></div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page">
-  <h1 class="big glow">WELCOME TO iTECH CLUB</h1>
-  <p>Press ENTER or TAP anywhere to continue</p>
+  <h1 class="intro-title">WELCOME TO iTECH CLUB</h1>
+  <p>Press ENTER or TAP anywhere</p>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <h1 class="big glow">MISS IDA</h1>
+  <h1 class="glitch-text">MISS IDA</h1>
 
   <button onclick="showPage('sem4')">SEM 4</button>
   <button onclick="showPage('sem3')">SEM 3</button>
   <button onclick="showPage('sem2')">SEM 2</button>
   <button onclick="showPage('sem1')">SEM 1</button>
 
-  <br><br>
   <button onclick="showPage('page1')">⬅ BACK HOME</button>
 </div>
 
 <!-- SEM -->
 <div id="sem4" class="page">
-  <h1 class="glow">SEM 4</h1>
+  <h1>SEM 4</h1>
   <p>Shi Le</p>
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
 <div id="sem3" class="page">
-  <h1 class="glow">SEM 3</h1>
+  <h1>SEM 3</h1>
   <p>Syaa</p>
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
 <div id="sem2" class="page">
-  <h1 class="glow">SEM 2</h1>
+  <h1>SEM 2</h1>
   <p>Coming Soon</p>
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
 <div id="sem1" class="page">
-  <h1 class="glow">SEM 1</h1>
+  <h1>SEM 1</h1>
   <p>Coming Soon</p>
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
@@ -142,149 +181,87 @@ button:hover {
 <footer>© Happy Ng</footer>
 
 <script>
-// 🎬 Boot Sequence
-const boot = document.getElementById("boot");
-
-const sequence = [
-  "Initializing system...",
-  "Loading secure modules...",
-  "Establishing connection...",
-  "Decrypting data...",
-  "ACCESS GRANTED"
+// 🎬 Boot
+const lines = [
+"Initializing system...",
+"Loading modules...",
+"Access Granted"
 ];
 
-let i = 0;
+let i=0;
+const boot=document.getElementById("boot");
 
-function playBoot() {
-  if (i >= sequence.length) {
-    setTimeout(() => fadeOutBoot(), 1000);
-    return;
-  }
+function bootAnim(){
+ if(i>=lines.length){
+  setTimeout(()=>{boot.style.display="none";showPage("page1")},800);
+  return;
+ }
+ let d=document.createElement("div");
+ boot.appendChild(d);
+ let t=lines[i],j=0;
+ function type(){
+  if(j<t.length){d.innerHTML+=t[j++];setTimeout(type,40);}
+ }
+ type();
+ i++;
+ setTimeout(bootAnim,600);
+}
+bootAnim();
 
-  let line = document.createElement("div");
-  boot.appendChild(line);
-
-  let text = sequence[i];
-  let j = 0;
-
-  function typeChar() {
-    if (j < text.length) {
-      line.innerHTML += text[j];
-      j++;
-      setTimeout(typeChar, 40);
-    }
-  }
-
-  typeChar();
-  i++;
-  setTimeout(playBoot, 700);
+// 页面切换（glitch+fade）
+function showPage(id){
+ const current=document.querySelector(".page[style*='flex']");
+ if(current){
+  current.classList.add("glitch","fade-out");
+  setTimeout(()=>{
+   current.style.display="none";
+   current.classList.remove("glitch","fade-out");
+   const next=document.getElementById(id);
+   next.style.display="flex";
+   next.classList.add("fade-in");
+   setTimeout(()=>next.classList.remove("fade-in"),400);
+  },300);
+ }else{
+  document.getElementById(id).style.display="flex";
+ }
 }
 
-function fadeOutBoot() {
-  document.body.style.transition = "opacity 1s";
-  document.body.style.opacity = "0";
-
-  setTimeout(() => {
-    boot.style.display = "none";
-    document.body.style.opacity = "1";
-    showPage("page1");
-  }, 1000);
+// 点击进入
+function enterSystem(){
+ const page1=document.getElementById("page1");
+ if(window.getComputedStyle(page1).display==="none") return;
+ flash(()=>showPage("page2"));
 }
 
-// 页面切换
-function showPage(id) {
-  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-  document.getElementById(id).style.display = "block";
-}
-
-// 💥 点击进入（手机+电脑）
-function enterSystem() {
-  flashEffect(() => {
-    showPage("page2");
-  });
-}
-
-document.addEventListener("click", () => {
-  if (document.getElementById("page1").style.display === "block") {
-    enterSystem();
-  }
+document.addEventListener("click",enterSystem);
+document.addEventListener("touchstart",enterSystem);
+document.addEventListener("keydown",e=>{
+ if(e.key==="Enter") enterSystem();
 });
 
-// ⌨️ Enter 进入
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    if (document.getElementById("page1").style.display === "block") {
-      enterSystem();
-    }
-  }
-});
-
-// 💥 闪屏效果
-function flashEffect(callback) {
-  const flash = document.createElement("div");
-
-  flash.style.position = "fixed";
-  flash.style.top = 0;
-  flash.style.left = 0;
-  flash.style.width = "100%";
-  flash.style.height = "100%";
-  flash.style.background = "#00ff88";
-  flash.style.opacity = "0.8";
-  flash.style.zIndex = "999";
-
-  document.body.appendChild(flash);
-
-  setTimeout(() => {
-    flash.style.opacity = "0";
-    setTimeout(() => {
-      document.body.removeChild(flash);
-      callback();
-    }, 200);
-  }, 100);
+// 闪屏
+function flash(cb){
+ const f=document.createElement("div");
+ Object.assign(f.style,{
+  position:"fixed",top:0,left:0,width:"100%",height:"100%",
+  background:"#00ff88",opacity:"0.8",zIndex:999
+ });
+ document.body.appendChild(f);
+ setTimeout(()=>{
+  f.style.opacity="0";
+  setTimeout(()=>{f.remove();cb();},200);
+ },100);
 }
 
-playBoot();
-  document.addEventListener("click", enterSystem);
-document.addEventListener("touchstart", enterSystem);
-
-function enterSystem() {
-  const page1 = document.getElementById("page1");
-
-  if (window.getComputedStyle(page1).display === "none") return;
-
-  flashEffect(() => {
-    showPage("page2");
-  });
-}
-
-// 🌌 粒子背景
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for (let i = 0; i < 120; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2
-  });
-}
-
-function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "#00ff88";
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-    ctx.fill();
-  });
-}
-
-setInterval(draw, 30);
+// 粒子
+const c=document.getElementById("bg"),ctx=c.getContext("2d");
+c.width=innerWidth;c.height=innerHeight;
+let p=[...Array(100)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2}));
+setInterval(()=>{
+ ctx.clearRect(0,0,c.width,c.height);
+ ctx.fillStyle="#00ff88";
+ p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();});
+},30);
 </script>
 
 </body>
