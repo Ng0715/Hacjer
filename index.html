@@ -13,7 +13,7 @@ body {
   overflow: hidden;
 }
 
-/* 🔥 Matrix 背景 */
+/* Matrix */
 #matrix {
   position: fixed;
   top: 0;
@@ -23,145 +23,212 @@ body {
   z-index: -1;
 }
 
-/* 🔥 顶部 iTech Club */
+/* Top */
 .top-label {
   position: fixed;
   top: 20px;
   width: 100%;
   text-align: center;
-  font-size: 14px;
   letter-spacing: 3px;
   opacity: 0.7;
 }
 
-/* 页面 */
+/* Page */
 .page {
   display: none;
-  text-align: center;
   height: 100vh;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+.active { display: flex; }
 
-.active {
-  display: flex;
-}
+/* Title */
+.big-title { font-size: 60px; }
 
-/* 标题 */
-.big-title {
-  font-size: 60px;
-  margin-bottom: 20px;
-}
-
-/* Batch 标题（在上面） */
+/* Batch title */
 .page-title {
   position: absolute;
   top: 100px;
-  width: 100%;
-  text-align: center;
   font-size: 28px;
 }
 
-/* 按钮 */
+/* Button */
 .btn {
   border: 1px solid #00ff99;
   padding: 12px 25px;
   margin: 10px;
   cursor: pointer;
 }
-
 .btn:hover {
   background: #00ff99;
   color: black;
 }
 
-/* copyright */
-.footer {
+/* Footer */
+.footer-bar {
   position: fixed;
-  bottom: 10px;
+  bottom: 0;
   width: 100%;
   text-align: center;
+  padding: 10px;
+  border-top: 1px solid #00ff99;
+}
+.footer-text {
   font-size: 10px;
   opacity: 0.5;
+}
+
+/* Popup */
+#popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  border: 1px solid #00ff99;
+  padding: 20px;
+  width: 260px;
+  background: black;
+}
+
+.loading-bar {
+  height: 4px;
+  background: #00ff99;
+  width: 0%;
+  animation: load 1s forwards;
+}
+
+@keyframes load {
+  to { width: 100%; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 Matrix -->
 <canvas id="matrix"></canvas>
-
-<!-- 🔥 顶部 -->
 <div class="top-label">iTech Club</div>
 
-<!-- Page 1 -->
+<!-- PAGE 1 -->
 <div id="page1" class="page active">
-  <div class="big-title">WELCOME TO iTECH CLUB</div>
+  <div class="big-title">WELCOME</div>
   <div class="btn" onclick="goPage('page2')">ENTER</div>
 </div>
 
-<!-- Page 2 -->
+<!-- PAGE 2 -->
 <div id="page2" class="page">
   <div class="big-title">MISS IDA</div>
 
   <div class="btn" onclick="goPage('batch1')">Batch 1</div>
   <div class="btn" onclick="goPage('batch2')">Batch 2</div>
   <div class="btn" onclick="goPage('batch3')">Batch 3</div>
-
-  <div class="btn" onclick="goPage('page1')">← Back</div>
 </div>
 
-<!-- Batch 1 -->
+<!-- BATCH 1 -->
 <div id="batch1" class="page">
   <div class="page-title">Batch 1</div>
 
-  <div class="btn">Shi Le</div>
-  <div class="btn">Student B</div>
-
-  <div class="btn" onclick="goPage('page2')">← Back</div>
+  <div class="btn" onclick="showPopup('Shi Le','2005-07-12')">Shi Le</div>
 </div>
 
-<!-- Batch 2 -->
+<!-- BATCH 2 -->
 <div id="batch2" class="page">
   <div class="page-title">Batch 2</div>
 
-  <div class="btn">Syaa</div>
-
-  <div class="btn" onclick="goPage('page2')">← Back</div>
+  <div class="btn" onclick="showPopup('Syaa','2005-03-21')">Syaa</div>
 </div>
 
-<!-- Batch 3 -->
+<!-- BATCH 3 -->
 <div id="batch3" class="page">
   <div class="page-title">Batch 3</div>
 
-  <div class="btn">Student X</div>
-
-  <div class="btn" onclick="goPage('page2')">← Back</div>
+  <div class="btn" onclick="showPopup('Student X','2007-02-02')">Student X</div>
 </div>
 
-<div class="footer">© Happy Ng</div>
+<!-- POPUP -->
+<div id="popup">
+  <div class="popup-box">
+    <div class="loading-bar"></div>
+    <div id="popupText"></div>
+    <div class="btn" onclick="closePopup()">CLOSE</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-bar">
+  <div class="btn" onclick="goBack()">← BACK</div>
+  <div class="footer-text">© Happy Ng</div>
+</div>
 
 <script>
+
+/* 页面切换 + 历史 */
+let historyStack = [];
+
 function goPage(id) {
+  const current = document.querySelector(".page.active");
+  if (current) historyStack.push(current.id);
+
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* 🔥 Matrix 雨 */
+function goBack() {
+  if (historyStack.length === 0) return;
+  const last = historyStack.pop();
+
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(last).classList.add("active");
+}
+
+/* Popup */
+function showPopup(name, birthday) {
+  const popup = document.getElementById("popup");
+  const textEl = document.getElementById("popupText");
+
+  popup.style.display = "flex";
+  textEl.innerText = "";
+
+  let text = "Name: " + name + "\nBirthday: " + birthday;
+  let i = 0;
+
+  setTimeout(() => {
+    function type() {
+      if (i < text.length) {
+        textEl.innerText += text.charAt(i);
+        i++;
+        setTimeout(type, 30);
+      }
+    }
+    type();
+  }, 500);
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+/* Matrix */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const letters = "01アイウエオカキクケコ";
+const letters = "01234567890";
 const fontSize = 14;
 const columns = canvas.width / fontSize;
 
 const drops = [];
-for (let x = 0; x < columns; x++) drops[x] = 1;
+for (let i = 0; i < columns; i++) drops[i] = 1;
 
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
@@ -182,6 +249,7 @@ function draw() {
 }
 
 setInterval(draw, 33);
+
 </script>
 
 </body>
