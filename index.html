@@ -244,6 +244,18 @@ function flashEffect(callback) {
 }
 
 playBoot();
+  document.addEventListener("click", enterSystem);
+document.addEventListener("touchstart", enterSystem);
+
+function enterSystem() {
+  const page1 = document.getElementById("page1");
+
+  if (window.getComputedStyle(page1).display === "none") return;
+
+  flashEffect(() => {
+    showPage("page2");
+  });
+}
 
 // 🌌 粒子背景
 const canvas = document.getElementById("bg");
