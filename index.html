@@ -10,7 +10,6 @@ body {
   background: black;
   color: #00ff99;
   font-family: monospace;
-  overflow-x: hidden;
 }
 
 /* Matrix */
@@ -27,11 +26,11 @@ body {
 /* 顶部 */
 .top-label {
   position: fixed;
-  top: 20px;
+  top: 25px;
   width: 100%;
   text-align: center;
-  letter-spacing: 3px;
-  opacity: 0.7;
+  font-size: 22px;
+  letter-spacing: 5px;
 }
 
 /* 页面 */
@@ -44,33 +43,64 @@ body {
 }
 .active { display: flex; }
 
-/* 标题 */
+/* 🔥 主标题（大） */
 .big-title {
-  font-size: 60px;
+  font-size: 90px;
+  text-align: center;
 }
 
-/* 让 MISS IDA 可点击 */
-.big-title.btn {
+/* 🔥 MISS IDA（美化版） */
+.glitch {
+  font-size: 110px;
   cursor: pointer;
-}
-.big-title.btn:hover {
-  text-shadow: 0 0 10px #00ff99;
+  position: relative;
 }
 
-/* Batch 标题 */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+}
+
+.glitch::before {
+  color: red;
+  animation: glitch1 1s infinite;
+}
+
+.glitch::after {
+  color: blue;
+  animation: glitch2 1s infinite;
+}
+
+@keyframes glitch1 {
+  0% { left: 2px; }
+  50% { left: -2px; }
+  100% { left: 2px; }
+}
+
+@keyframes glitch2 {
+  0% { left: -2px; }
+  50% { left: 2px; }
+  100% { left: -2px; }
+}
+
+/* 🔥 Batch 标题 */
 .page-title {
   position: absolute;
-  top: 100px;
-  font-size: 28px;
+  top: 120px;
+  font-size: 45px;
 }
 
-/* 按钮 */
+/* 🔥 按钮（大） */
 .btn {
-  border: 1px solid #00ff99;
-  padding: 12px 25px;
-  margin: 10px;
+  border: 2px solid #00ff99;
+  padding: 18px 35px;
+  margin: 15px;
+  font-size: 24px;
   cursor: pointer;
 }
+
 .btn:hover {
   background: #00ff99;
   color: black;
@@ -82,16 +112,15 @@ body {
   bottom: 0;
   width: 100%;
   text-align: center;
-  padding: 10px;
+  padding: 12px;
   border-top: 1px solid #00ff99;
-  background: rgba(0,0,0,0.6);
-}
-.footer-text {
-  font-size: 10px;
-  opacity: 0.5;
 }
 
-/* Popup */
+.footer-text {
+  font-size: 16px;
+}
+
+/* 🔥 Popup（大字） */
 #popup {
   position: fixed;
   top: 0;
@@ -101,20 +130,19 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.85);
-  z-index: 10;
+  background: rgba(0,0,0,0.9);
 }
 
 .popup-box {
-  border: 1px solid #00ff99;
-  padding: 20px;
-  width: 260px;
+  border: 2px solid #00ff99;
+  padding: 30px;
+  width: 320px;
   background: black;
+  font-size: 22px; /* 🔥 重点 */
 }
 
-/* loading */
 .loading-bar {
-  height: 4px;
+  height: 5px;
   background: #00ff99;
   width: 0%;
   animation: load 1s forwards;
@@ -139,7 +167,10 @@ body {
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <div class="big-title btn"
+
+  <!-- 🔥 美化 MISS IDA -->
+  <div class="glitch"
+       data-text="MISS IDA"
        onclick="showPopup('Miss Ida','1990-05-12')">
     MISS IDA
   </div>
@@ -187,7 +218,7 @@ body {
 
 <script>
 
-/* 页面控制 */
+/* 页面 */
 let historyStack = [];
 
 function goPage(id) {
@@ -200,8 +231,8 @@ function goPage(id) {
 
 function goBack() {
   if (historyStack.length === 0) return;
-
   const last = historyStack.pop();
+
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(last).classList.add("active");
 }
@@ -222,7 +253,7 @@ function showPopup(name, birthday) {
       if (i < text.length) {
         textEl.innerText += text.charAt(i);
         i++;
-        setTimeout(type, 30);
+        setTimeout(type, 25);
       }
     }
     type();
@@ -233,7 +264,7 @@ function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-/* Matrix（数字版） */
+/* Matrix（数字） */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
@@ -241,7 +272,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const letters = "0123456789";
-const fontSize = 14;
+const fontSize = 16;
 const columns = canvas.width / fontSize;
 
 const drops = [];
