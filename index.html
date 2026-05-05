@@ -10,7 +10,7 @@ body {
   background: black;
   color: #00ff99;
   font-family: monospace;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Matrix */
@@ -21,9 +21,10 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
+  pointer-events: none;
 }
 
-/* Top */
+/* 顶部 */
 .top-label {
   position: fixed;
   top: 20px;
@@ -33,7 +34,7 @@ body {
   opacity: 0.7;
 }
 
-/* Page */
+/* 页面 */
 .page {
   display: none;
   height: 100vh;
@@ -43,17 +44,27 @@ body {
 }
 .active { display: flex; }
 
-/* Title */
-.big-title { font-size: 60px; }
+/* 标题 */
+.big-title {
+  font-size: 60px;
+}
 
-/* Batch title */
+/* 让 MISS IDA 可点击 */
+.big-title.btn {
+  cursor: pointer;
+}
+.big-title.btn:hover {
+  text-shadow: 0 0 10px #00ff99;
+}
+
+/* Batch 标题 */
 .page-title {
   position: absolute;
   top: 100px;
   font-size: 28px;
 }
 
-/* Button */
+/* 按钮 */
 .btn {
   border: 1px solid #00ff99;
   padding: 12px 25px;
@@ -73,6 +84,7 @@ body {
   text-align: center;
   padding: 10px;
   border-top: 1px solid #00ff99;
+  background: rgba(0,0,0,0.6);
 }
 .footer-text {
   font-size: 10px;
@@ -86,10 +98,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.85);
   display: none;
   justify-content: center;
   align-items: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 10;
 }
 
 .popup-box {
@@ -99,6 +112,7 @@ body {
   background: black;
 }
 
+/* loading */
 .loading-bar {
   height: 4px;
   background: #00ff99;
@@ -125,28 +139,31 @@ body {
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <div class="big-title">MISS IDA</div>
+  <div class="big-title btn"
+       onclick="showPopup('Miss Ida','1990-05-12')">
+    MISS IDA
+  </div>
 
   <div class="btn" onclick="goPage('batch1')">Batch 1</div>
   <div class="btn" onclick="goPage('batch2')">Batch 2</div>
   <div class="btn" onclick="goPage('batch3')">Batch 3</div>
 </div>
 
-<!-- BATCH 1 -->
+<!-- Batch 1 -->
 <div id="batch1" class="page">
   <div class="page-title">Batch 1</div>
 
   <div class="btn" onclick="showPopup('Shi Le','2005-07-12')">Shi Le</div>
 </div>
 
-<!-- BATCH 2 -->
+<!-- Batch 2 -->
 <div id="batch2" class="page">
   <div class="page-title">Batch 2</div>
 
   <div class="btn" onclick="showPopup('Syaa','2005-03-21')">Syaa</div>
 </div>
 
-<!-- BATCH 3 -->
+<!-- Batch 3 -->
 <div id="batch3" class="page">
   <div class="page-title">Batch 3</div>
 
@@ -170,7 +187,7 @@ body {
 
 <script>
 
-/* 页面切换 + 历史 */
+/* 页面控制 */
 let historyStack = [];
 
 function goPage(id) {
@@ -183,13 +200,13 @@ function goPage(id) {
 
 function goBack() {
   if (historyStack.length === 0) return;
-  const last = historyStack.pop();
 
+  const last = historyStack.pop();
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(last).classList.add("active");
 }
 
-/* Popup */
+/* popup */
 function showPopup(name, birthday) {
   const popup = document.getElementById("popup");
   const textEl = document.getElementById("popupText");
@@ -216,14 +233,14 @@ function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-/* Matrix */
+/* Matrix（数字版） */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const letters = "01234567890";
+const letters = "0123456789";
 const fontSize = 14;
 const columns = canvas.width / fontSize;
 
