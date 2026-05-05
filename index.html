@@ -2,266 +2,334 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>iTech Cinematic System</title>
+<title>iTech System</title>
 
 <style>
-body {
-  margin: 0;
-  background: black;
-  color: #00ff88;
-  font-family: monospace;
-  overflow: hidden;
+body{
+  margin:0;
+  background:black;
+  color:#00ff88;
+  font-family:monospace;
+  overflow:hidden;
 }
 
-/* CRT 扫描线 */
-body::after {
-  content: "";
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0,0,0,0.2) 0px,
-    rgba(0,0,0,0.2) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-}
-
-/* 页面布局 */
-.page {
-  display: none;
-  height: 100vh;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-/* 标题动画 */
-.intro-title {
-  font-size: 70px;
-  opacity: 0;
-  transform: scale(0.6);
-  animation: zoomIn 1s ease forwards;
-}
-
-@keyframes zoomIn {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* MISS IDA glitch */
-.glitch-text {
-  font-size: 60px;
-  animation: glitchText 1.5s infinite;
-}
-
-@keyframes glitchText {
-  0% { text-shadow: 2px 0 red, -2px 0 blue; }
-  50% { text-shadow: -2px 0 red, 2px 0 blue; }
-  100% { text-shadow: none; }
-}
-
-/* 按钮扫描 */
-button {
-  padding: 12px 25px;
-  margin: 15px;
-  background: black;
-  color: #00ff88;
-  border: 1px solid #00ff88;
-  position: relative;
-  overflow: hidden;
-}
-
-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(0,255,136,0.4), transparent);
-  transition: 0.5s;
-}
-
-button:hover::after {
-  left: 100%;
-}
-
-/* fade + glitch */
-.fade-out { opacity: 0; transition: 0.4s; }
-.fade-in { opacity: 1; transition: 0.4s; }
-
-.glitch {
-  animation: glitch 0.3s;
-}
-
-@keyframes glitch {
-  0% { transform: translate(0); }
-  30% { transform: translate(-5px,5px); }
-  60% { transform: translate(5px,-5px); }
-  100% { transform: translate(0); }
+/* 页面 */
+.page{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
 /* Boot */
-#boot {
-  padding: 40px;
-  font-size: 18px;
+#boot{padding:30px}
+
+/* 标题动画 */
+.intro-title{
+  font-size:70px;
+  animation:zoom 1s forwards;
+}
+@keyframes zoom{
+  from{opacity:0;transform:scale(0.6)}
+  to{opacity:1;transform:scale(1)}
 }
 
-/* 粒子 */
-canvas {
-  position: fixed;
-  z-index: -1;
+/* glitch */
+.glitch-text{
+  font-size:100px;
+  animation:glitch 1s infinite;
+}
+@keyframes glitch{
+  0%{text-shadow:2px 0 red,-2px 0 blue}
+  50%{text-shadow:-2px 0 red,2px 0 blue}
+  100%{text-shadow:none}
+}
+
+/* 按钮 */
+button{
+  padding:16px 30px;
+  margin:10px;
+  background:black;
+  border:1px solid #00ff88;
+  color:#00ff88;
+  position:relative;
+  overflow:hidden;
+  font-size:16px;
+}
+button::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,#00ff88,transparent);
+  transition:.5s;
+}
+button:hover::after{left:100%}
+
+/* grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,120px);
+  gap:15px;
+  margin:20px;
+}
+.card{
+  border:1px solid #00ff88;
+  padding:10px;
+  cursor:pointer;
+  text-align:center;
+}
+.card:hover{
+  background:#00ff88;
+  color:black;
+  transform:scale(1.05);
+}
+
+/* popup */
+.popup{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.8);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+.popup.active{opacity:1;pointer-events:auto}
+
+.popup-box{
+  border:1px solid #00ff88;
+  padding:30px;
+  background:black;
+  transform:scale(.7);
+  opacity:0;
+}
+.popup.active .popup-box{
+  animation:popupIn .4s forwards,glitch .3s;
+}
+@keyframes popupIn{
+  to{transform:scale(1);opacity:1}
+}
+
+/* progress */
+.progress-bar{
+  width:220px;height:10px;
+  border:1px solid #00ff88;
+  margin:10px auto;
+}
+#progress{
+  height:100%;
+  width:0;
+  background:#00ff88;
+}
+
+/* 顶部标签 */
+.top-label{
+  position:absolute;
+  top:20px;
+  font-size:14px;
+  opacity:.6;
+  letter-spacing:2px;
 }
 
 /* footer */
-footer {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  opacity: 0.5;
+footer{
+  position:fixed;
+  bottom:10px;
+  width:100%;
+  text-align:center;
+  opacity:.5;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
 <div id="boot"></div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page">
   <h1 class="intro-title">WELCOME TO iTECH CLUB</h1>
-  <p>Press ENTER or TAP anywhere</p>
+  <p>Tap or Press ENTER</p>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <h1 class="glitch-text">MISS IDA</h1>
+  <p>IT LECTURER</p>
 
-  <button onclick="showPage('sem4')">SEM 4</button>
-  <button onclick="showPage('sem3')">SEM 3</button>
-  <button onclick="showPage('sem2')">SEM 2</button>
-  <button onclick="showPage('sem1')">SEM 1</button>
+  <h1 class="glitch-text"
+      onclick="showLecturer(this)"
+      data-name="Miss Ida"
+      data-birth="1990-05-12">
+      MISS IDA
+  </h1>
 
-  <button onclick="showPage('page1')">⬅ BACK HOME</button>
+  <button onclick="showPage('batch1')">BATCH 1</button>
+  <button onclick="showPage('batch2')">BATCH 2</button>
+  <button onclick="showPage('batch3')">BATCH 3</button>
+
+  <button onclick="showPage('page1')">⬅ BACK</button>
 </div>
 
-<!-- SEM -->
-<div id="sem4" class="page">
-  <h1>SEM 4</h1>
-  <p>Shi Le</p>
+<!-- BATCH 1 -->
+<div id="batch1" class="page">
+  <div class="top-label">FIRST BRAND</div>
+  <h1>BATCH 1</h1>
+
+  <div class="grid">
+    <div class="card" onclick="showStudent(this)" data-name="Shi Le" data-birth="2005-07-12">Shi Le</div>
+    <div class="card" onclick="showStudent(this)" data-name="Syaa" data-birth="2005-03-21">Syaa</div>
+  </div>
+
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
-<div id="sem3" class="page">
-  <h1>SEM 3</h1>
-  <p>Syaa</p>
+<!-- BATCH 2 -->
+<div id="batch2" class="page">
+  <div class="top-label">FIRST BRAND</div>
+  <h1>BATCH 2</h1>
+
+  <div class="grid">
+    <div class="card" onclick="showStudent(this)" data-name="Student A" data-birth="2006-01-01">Student A</div>
+  </div>
+
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
-<div id="sem2" class="page">
-  <h1>SEM 2</h1>
-  <p>Coming Soon</p>
+<!-- BATCH 3 -->
+<div id="batch3" class="page">
+  <div class="top-label">FIRST BRAND</div>
+  <h1>BATCH 3</h1>
+
+  <div class="grid">
+    <div class="card" onclick="showStudent(this)" data-name="Student B" data-birth="2007-02-02">Student B</div>
+  </div>
+
   <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
-<div id="sem1" class="page">
-  <h1>SEM 1</h1>
-  <p>Coming Soon</p>
-  <button onclick="showPage('page2')">⬅ Back</button>
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popup-box">
+    <p id="statusText"></p>
+
+    <div class="progress-bar">
+      <div id="progress"></div>
+    </div>
+
+    <h2 id="p-name"></h2>
+    <p id="p-birth"></p>
+
+    <button onclick="closePopup()">CLOSE</button>
+  </div>
 </div>
 
 <footer>© Happy Ng</footer>
 
 <script>
-// 🎬 Boot
-const lines = [
-"Initializing system...",
-"Loading modules...",
-"Access Granted"
-];
 
+/* Boot */
+let boot=document.getElementById("boot");
+let lines=["Initializing system...","Loading modules...","Access Granted"];
 let i=0;
-const boot=document.getElementById("boot");
-
 function bootAnim(){
  if(i>=lines.length){
-  setTimeout(()=>{boot.style.display="none";showPage("page1")},800);
+  boot.style.display="none";
+  showPage("page1");
   return;
  }
  let d=document.createElement("div");
+ d.innerText=lines[i++];
  boot.appendChild(d);
- let t=lines[i],j=0;
- function type(){
-  if(j<t.length){d.innerHTML+=t[j++];setTimeout(type,40);}
- }
- type();
- i++;
  setTimeout(bootAnim,600);
 }
 bootAnim();
 
-// 页面切换（glitch+fade）
+/* Page */
 function showPage(id){
- const current=document.querySelector(".page[style*='flex']");
- if(current){
-  current.classList.add("glitch","fade-out");
-  setTimeout(()=>{
-   current.style.display="none";
-   current.classList.remove("glitch","fade-out");
-   const next=document.getElementById(id);
-   next.style.display="flex";
-   next.classList.add("fade-in");
-   setTimeout(()=>next.classList.remove("fade-in"),400);
-  },300);
- }else{
-  document.getElementById(id).style.display="flex";
+ document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+ document.getElementById(id).style.display="flex";
+}
+
+/* Enter */
+function enterSystem(){
+ if(getComputedStyle(page1).display!=="none"){
+  showPage("page2");
  }
 }
-
-// 点击进入
-function enterSystem(){
- const page1=document.getElementById("page1");
- if(window.getComputedStyle(page1).display==="none") return;
- flash(()=>showPage("page2"));
-}
-
 document.addEventListener("click",enterSystem);
-document.addEventListener("touchstart",enterSystem);
 document.addEventListener("keydown",e=>{
  if(e.key==="Enter") enterSystem();
 });
 
-// 闪屏
-function flash(cb){
- const f=document.createElement("div");
- Object.assign(f.style,{
-  position:"fixed",top:0,left:0,width:"100%",height:"100%",
-  background:"#00ff88",opacity:"0.8",zIndex:999
- });
- document.body.appendChild(f);
- setTimeout(()=>{
-  f.style.opacity="0";
-  setTimeout(()=>{f.remove();cb();},200);
- },100);
+/* typing */
+function typeText(el,text,s=30){
+ el.textContent="";
+ let i=0;
+ function t(){
+  if(i<=text.length){
+   el.textContent=text.slice(0,i++);
+   setTimeout(t,s);
+  }
+ }
+ t();
 }
 
-// 粒子
-const c=document.getElementById("bg"),ctx=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-let p=[...Array(100)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2}));
-setInterval(()=>{
- ctx.clearRect(0,0,c.width,c.height);
- ctx.fillStyle="#00ff88";
- p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();});
-},30);
+/* 系统流程 */
+function runSystem(name,birth,type){
+ let popup=document.getElementById("popup");
+ let status=document.getElementById("statusText");
+ let bar=document.getElementById("progress");
+
+ let nameEl=document.getElementById("p-name");
+ let birthEl=document.getElementById("p-birth");
+
+ popup.classList.add("active");
+ bar.style.width="0%";
+ nameEl.textContent="";
+ birthEl.textContent="";
+
+ status.textContent="Scanning "+type+" database...";
+
+ let p=0;
+ let int=setInterval(()=>{
+  p+=Math.random()*20;
+  bar.style.width=p+"%";
+
+  if(p>=100){
+   clearInterval(int);
+   status.textContent="Accessing "+type+" record...";
+
+   setTimeout(()=>{
+    status.textContent="Data loaded";
+    typeText(nameEl,name,40);
+    typeText(birthEl,"Birthday: "+birth,25);
+   },800);
+  }
+
+ },200);
+}
+
+/* student */
+function showStudent(el){
+ runSystem(el.dataset.name,el.dataset.birth,"student");
+}
+
+/* lecturer */
+function showLecturer(el){
+ runSystem(el.dataset.name,el.dataset.birth,"lecturer");
+}
+
+/* close */
+function closePopup(){
+ document.getElementById("popup").classList.remove("active");
+}
+
 </script>
 
 </body>
