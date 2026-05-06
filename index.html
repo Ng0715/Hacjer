@@ -5,298 +5,319 @@
 <title>iTech System</title>
 
 <style>
-body {
-  margin: 0;
-  background: black;
-  color: #00ff99;
-  font-family: monospace;
+body{
+  margin:0;
+  background:black;
+  color:#00ff88;
+  font-family:monospace;
+  overflow:hidden;
 }
 
-/* Matrix */
-#matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* 顶部 */
-.top-label {
-  position: fixed;
-  top: 25px;
-  width: 100%;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 5px;
+/* 背景 */
+#bg{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
 }
 
 /* 页面 */
-.page {
-  display: none;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.active { display: flex; }
-
-/* 🔥 主标题（大） */
-.big-title {
-  font-size: 90px;
-  text-align: center;
+.page{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
-/* 🔥 MISS IDA（美化版） */
-.glitch {
-  font-size: 110px;
-  cursor: pointer;
-  position: relative;
+/* 标题 */
+.intro-title{
+  font-size:70px;
+  animation:zoom 1s forwards;
+}
+@keyframes zoom{
+  from{opacity:0;transform:scale(0.6)}
+  to{opacity:1;transform:scale(1)}
 }
 
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
+/* glitch */
+.glitch-text{
+  font-size:100px;
+  animation:glitch 1s infinite;
+}
+@keyframes glitch{
+  0%{text-shadow:2px 0 red,-2px 0 blue}
+  50%{text-shadow:-2px 0 red,2px 0 blue}
+  100%{text-shadow:none}
 }
 
-.glitch::before {
-  color: red;
-  animation: glitch1 1s infinite;
+/* 按钮 */
+button{
+  padding:16px 30px;
+  margin:10px;
+  background:black;
+  border:1px solid #00ff88;
+  color:#00ff88;
+  position:relative;
+  overflow:hidden;
+  font-size:16px;
+}
+button::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,#00ff88,transparent);
+  transition:.5s;
+}
+button:hover::after{left:100%}
+
+/* grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,120px);
+  gap:15px;
+  margin:20px;
+}
+.card{
+  border:1px solid #00ff88;
+  padding:10px;
+  cursor:pointer;
+  text-align:center;
+}
+.card:hover{
+  background:#00ff88;
+  color:black;
 }
 
-.glitch::after {
-  color: blue;
-  animation: glitch2 1s infinite;
+/* popup */
+.popup{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.8);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+.popup.active{opacity:1;pointer-events:auto}
+
+.popup-box{
+  border:1px solid #00ff88;
+  padding:25px;
+  background:black;
+  width:260px;
+  max-width:80%;
+  text-align:left;
+  word-wrap:break-word;
+  overflow:hidden;
+  box-shadow:0 0 20px #00ff88;
 }
 
-@keyframes glitch1 {
-  0% { left: 2px; }
-  50% { left: -2px; }
-  100% { left: 2px; }
+#p-name{font-size:20px;margin-top:10px}
+#p-birth{font-size:14px;opacity:.8}
+
+/* progress */
+.progress-bar{
+  width:220px;height:10px;
+  border:1px solid #00ff88;
+  margin:10px auto;
+}
+#progress{
+  height:100%;
+  width:0;
+  background:#00ff88;
 }
 
-@keyframes glitch2 {
-  0% { left: -2px; }
-  50% { left: 2px; }
-  100% { left: -2px; }
-}
-
-/* 🔥 Batch 标题 */
-.page-title {
-  position: absolute;
-  top: 120px;
-  font-size: 45px;
-}
-
-/* 🔥 按钮（大） */
-.btn {
-  border: 2px solid #00ff99;
-  padding: 18px 35px;
-  margin: 15px;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: #00ff99;
-  color: black;
-}
-
-/* Footer */
-.footer-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  padding: 12px;
-  border-top: 1px solid #00ff99;
-}
-
-.footer-text {
-  font-size: 16px;
-}
-
-/* 🔥 Popup（大字） */
-#popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.9);
-}
-
-.popup-box {
-  border: 2px solid #00ff99;
-  padding: 30px;
-  width: 320px;
-  background: black;
-  font-size: 22px; /* 🔥 重点 */
-}
-
-.loading-bar {
-  height: 5px;
-  background: #00ff99;
-  width: 0%;
-  animation: load 1s forwards;
-}
-
-@keyframes load {
-  to { width: 100%; }
+/* footer */
+footer{
+  position:fixed;
+  bottom:10px;
+  width:100%;
+  text-align:center;
+  opacity:.5;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
-<div class="top-label">iTech Club</div>
+<canvas id="bg"></canvas>
 
 <!-- PAGE 1 -->
-<div id="page1" class="page active">
-  <div class="big-title">WELCOME</div>
-  <div class="btn" onclick="goPage('page2')">ENTER</div>
+<div id="page1" class="page">
+  <h1 class="intro-title">WELCOME TO iTECH CLUB</h1>
+  <p>Tap or Press ENTER</p>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
+  <p>IT LECTURER</p>
 
-  <!-- 🔥 美化 MISS IDA -->
-  <div class="glitch"
-       data-text="MISS IDA"
-       onclick="showPopup('Miss Ida','1990-05-12')">
-    MISS IDA
+  <h1 class="glitch-text"
+      onclick="showLecturer(this)"
+      data-name="Miss Ida"
+      data-birth="1990-05-12">
+      MISS IDA
+  </h1>
+
+  <button onclick="showPage('batch1')">BATCH 1</button>
+  <button onclick="showPage('batch2')">BATCH 2</button>
+  <button onclick="showPage('batch3')">BATCH 3</button>
+
+  <button onclick="showPage('page1')">⬅ BACK</button>
+</div>
+
+<!-- BATCH -->
+<div id="batch1" class="page">
+  <h1>BATCH 1</h1>
+
+  <div class="grid">
+    <div class="card" onclick="showStudent(this)" data-name="Shi Le" data-birth="2005-07-12">Shi Le</div>
+    <div class="card" onclick="showStudent(this)" data-name="Syaa" data-birth="2005-03-21">Syaa</div>
   </div>
 
-  <div class="btn" onclick="goPage('batch1')">Batch 1</div>
-  <div class="btn" onclick="goPage('batch2')">Batch 2</div>
-  <div class="btn" onclick="goPage('batch3')">Batch 3</div>
-</div>
-
-<!-- Batch 1 -->
-<div id="batch1" class="page">
-  <div class="page-title">Batch 1</div>
-
-  <div class="btn" onclick="showPopup('Shi Le','2005-07-12')">Shi Le</div>
-</div>
-
-<!-- Batch 2 -->
-<div id="batch2" class="page">
-  <div class="page-title">Batch 2</div>
-
-  <div class="btn" onclick="showPopup('Syaa','2005-03-21')">Syaa</div>
-</div>
-
-<!-- Batch 3 -->
-<div id="batch3" class="page">
-  <div class="page-title">Batch 3</div>
-
-  <div class="btn" onclick="showPopup('Student X','2007-02-02')">Student X</div>
+  <button onclick="showPage('page2')">⬅ Back</button>
 </div>
 
 <!-- POPUP -->
-<div id="popup">
+<div id="popup" class="popup">
   <div class="popup-box">
-    <div class="loading-bar"></div>
-    <div id="popupText"></div>
-    <div class="btn" onclick="closePopup()">CLOSE</div>
+    <p id="statusText"></p>
+
+    <div class="progress-bar">
+      <div id="progress"></div>
+    </div>
+
+    <h2 id="p-name"></h2>
+    <p id="p-birth"></p>
+
+    <button onclick="closePopup()">CLOSE</button>
   </div>
 </div>
 
-<!-- FOOTER -->
-<div class="footer-bar">
-  <div class="btn" onclick="goBack()">← BACK</div>
-  <div class="footer-text">© Happy Ng</div>
-</div>
+<footer>© Happy Ng</footer>
 
 <script>
 
 /* 页面 */
-let historyStack = [];
-
-function goPage(id) {
-  const current = document.querySelector(".page.active");
-  if (current) historyStack.push(current.id);
-
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+ document.getElementById(id).style.display="flex";
 }
+showPage("page1");
 
-function goBack() {
-  if (historyStack.length === 0) return;
-  const last = historyStack.pop();
-
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(last).classList.add("active");
+/* 进入 */
+function enterSystem(){
+ if(getComputedStyle(page1).display!=="none"){
+  showPage("page2");
+ }
 }
+document.addEventListener("click",enterSystem);
+document.addEventListener("keydown",e=>{
+ if(e.key==="Enter") enterSystem();
+});
 
-/* popup */
-function showPopup(name, birthday) {
-  const popup = document.getElementById("popup");
-  const textEl = document.getElementById("popupText");
-
-  popup.style.display = "flex";
-  textEl.innerText = "";
-
-  let text = "Name: " + name + "\nBirthday: " + birthday;
-  let i = 0;
-
-  setTimeout(() => {
-    function type() {
-      if (i < text.length) {
-        textEl.innerText += text.charAt(i);
-        i++;
-        setTimeout(type, 25);
-      }
-    }
-    type();
-  }, 500);
-}
-
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-}
-
-/* Matrix（数字） */
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const letters = "0123456789";
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-
-const drops = [];
-for (let i = 0; i < columns; i++) drops[i] = 1;
-
-function draw() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "#00ff99";
-  ctx.font = fontSize + "px monospace";
-
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters[Math.floor(Math.random() * letters.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
-      drops[i] = 0;
-
-    drops[i]++;
+/* typing */
+function typeText(el,text,s=30){
+ el.textContent="";
+ let i=0;
+ function t(){
+  if(i<=text.length){
+   el.textContent=text.slice(0,i++);
+   setTimeout(t,s);
   }
+ }
+ t();
 }
 
-setInterval(draw, 33);
+/* 系统 */
+function runSystem(name,birth,type){
+ let popup=document.getElementById("popup");
+ let status=document.getElementById("statusText");
+ let bar=document.getElementById("progress");
+
+ let nameEl=document.getElementById("p-name");
+ let birthEl=document.getElementById("p-birth");
+
+ popup.classList.add("active");
+ bar.style.width="0%";
+ nameEl.textContent="";
+ birthEl.textContent="";
+
+ status.textContent="Scanning "+type+"...";
+
+ let p=0;
+ let int=setInterval(()=>{
+  p+=Math.random()*20;
+  bar.style.width=p+"%";
+
+  if(p>=100){
+   clearInterval(int);
+   status.textContent="Data loaded";
+
+   setTimeout(()=>{
+    typeText(nameEl,name,40);
+    typeText(birthEl,"Birthday: "+birth,25);
+   },500);
+  }
+
+ },200);
+}
+
+/* student */
+function showStudent(el){
+ runSystem(el.dataset.name,el.dataset.birth,"student");
+}
+
+/* lecturer */
+function showLecturer(el){
+ runSystem(el.dataset.name,el.dataset.birth,"lecturer");
+}
+
+/* close */
+function closePopup(){
+ document.getElementById("popup").classList.remove("active");
+}
+
+/* ⭐ 背景星星 */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let stars=[];
+for(let i=0;i<120;i++){
+ stars.push({
+  x:Math.random()*canvas.width,
+  y:Math.random()*canvas.height,
+  r:Math.random()*1.5
+ });
+}
+
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#00ff88";
+
+ stars.forEach(s=>{
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+  ctx.fill();
+
+  s.y+=0.3;
+  if(s.y>canvas.height) s.y=0;
+ });
+
+ requestAnimationFrame(draw);
+}
+draw();
 
 </script>
 
