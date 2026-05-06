@@ -26,20 +26,21 @@ body{
 /* 页面 */
 .page{
   display:none;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
+  min-height:100vh;
+  padding:40px 20px;
+  display:flex;
   flex-direction:column;
+  align-items:center;
 }
 
 /* 标题 */
 .intro-title{
-  font-size:90px;
+  font-size:80px;
 }
 
 /* glitch */
 .glitch{
-  font-size:120px;
+  font-size:110px;
   animation:glitch 1s infinite;
 }
 @keyframes glitch{
@@ -50,12 +51,17 @@ body{
 
 /* 按钮 */
 button{
-  padding:20px 40px;
-  margin:15px;
+  padding:18px 40px;
+  margin:10px;
   font-size:22px;
   background:black;
   border:2px solid #00ff88;
   color:#00ff88;
+  cursor:pointer;
+}
+button:hover{
+  background:#00ff88;
+  color:black;
 }
 
 /* 卡片 */
@@ -75,6 +81,11 @@ button{
 .card:hover{
   background:#00ff88;
   color:black;
+}
+
+/* back */
+.back-btn{
+  margin-top:40px;
 }
 
 /* popup */
@@ -100,22 +111,27 @@ button{
 .popup-box{
   border:2px solid #00ff88;
   padding:40px;
-  width:300px;
-  text-align:center;
+  width:320px;
+  text-align:left;
   box-shadow:0 0 20px #00ff88;
+}
+
+/* scanning bar */
+.bar{
+  width:100%;
+  height:10px;
+  border:1px solid #00ff88;
+  margin:10px 0;
+}
+#scan{
+  height:100%;
+  width:0;
+  background:#00ff88;
 }
 
 #p-name{font-size:30px}
 #p-birth{font-size:22px;margin-top:10px}
 
-/* footer */
-footer{
-  position:fixed;
-  bottom:10px;
-  width:100%;
-  text-align:center;
-  font-size:14px;
-}
 </style>
 </head>
 
@@ -126,15 +142,14 @@ footer{
 <!-- PAGE 1 -->
 <div id="page1" class="page">
   <h1 class="intro-title">WELCOME TO iTECH CLUB</h1>
-  <p style="font-size:30px">Tap anywhere</p>
+  <p style="font-size:28px">Tap anywhere</p>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <p style="font-size:30px">IT LECTURER</p>
-
+  <p style="font-size:30px">iTech Club LECTURER</p>
   <h1 class="glitch"
-      onclick="showData('Miss Ida','1990-06-20')">
+      onclick="showData('Miss Ida','06-20')">
       MISS IDA
   </h1>
 
@@ -145,65 +160,70 @@ footer{
 
 <!-- BATCH 1 -->
 <div id="b1" class="page">
-<h1 style="font-size:80px">BATCH 1</h1>
+<h1 style="font-size:70px">BATCH 1</h1>
 
 <div class="grid">
-<div class="card" onclick="showData('Teeyna','2007-09-12')">Teeyna</div>
-<div class="card" onclick="showData('Keshika','2007-07-13')">Keshika</div>
-<div class="card" onclick="showData('Simon','2007-09-02')">Simon</div>
-<div class="card" onclick="showData('Rishi','2007-10-11')">Rishi</div>
-<div class="card" onclick="showData('Sathya','2007-05-14')">Sathya</div>
-<div class="card" onclick="showData('Shi Le','2005-07-12')">Shi Le</div>
-<div class="card" onclick="showData('Karan','2007-09-01')">Karan</div>
-<div class="card" onclick="showData('Dhea','2006-08-17')">Dhea</div>
-<div class="card" onclick="showData('Lun','2007-03-09')">Lun</div>
-<div class="card" onclick="showData('Fahmi','2006-05-20')">Fahmi</div>
+<div class="card" onclick="showData('NORFATINAH LUFFIAH BINTI MUHAMMAD FAIZAL','2007-09-12')">TEEYNA</div>
+<div class="card" onclick="showData('KESHIKA A/P GANESH','2007-07-13')">Keshxjia</div>
+<div class="card" onclick="showData('SIMON EDWIN A/L GOPALAN ','2007-09-02')">SIMON</div>
+<div class="card" onclick="showData('YRISHIKESH A/L YUVARAJ','2007-10-11')">Rishi</div>
+<div class="card" onclick="showData('SATHIARAJ A/L THANARAJ ','2007-05-14')">SATHYA</div>
+<div class="card" onclick="showData('NG SHI LE','2007-07-15')">Happy Ng</div>
+<div class="card" onclick="showData('SESHAKARAN ROSHAN A/L CHANDRA SEGAR ','2007-09-01')">S.KARAN.10</div>
+<div class="card" onclick="showData('ZAHRA MARDHIYAH BINTI MOHAMMED AZAM','2006-08-17')">Dhea</div>
+<div class="card" onclick="showData('VOO ZHENG LUN','2007-03-09')">Lun</div>
+<div class="card" onclick="showData('MOHAMAD ZULHILMI BIN ZAHLAN SHAHRIN ','2006-05-20')">Fahmi</div>
 </div>
 
+<button class="back-btn" onclick="showPage('page2')">⬅ BACK</button>
 </div>
 
 <!-- BATCH 2 -->
 <div id="b2" class="page">
-<h1 style="font-size:80px">BATCH 2</h1>
+<h1 style="font-size:70px">BATCH 2</h1>
 
 <div class="grid">
-<div class="card" onclick="showData('Sanjees','2007-12-16')">Sanjees</div>
-<div class="card" onclick="showData('Tarkesh','2007-12-17')">Tarkesh</div>
-<div class="card" onclick="showData('Pavithren','2007-10-09')">Pavithren</div>
-<div class="card" onclick="showData('Izuwan','2007-05-21')">Izuwan</div>
-<div class="card" onclick="showData('Praveen','2007-10-19')">Praveen</div>
-<div class="card" onclick="showData('Aravind','2007-04-20')">Aravind</div>
-<div class="card" onclick="showData('Dhaca','2007-07-19')">Dhaca</div>
+<div class="card" onclick="showData('SANJEESWARAN','2007-12-16')">SANJEES•1716</div>
+<div class="card" onclick="showData('TARKESHWARAN NAIR A/L ANANTHA KUMAR','2007-12-17')">Tarkesh</div>
+<div class="card" onclick="showData('PAVITHREN A/L THIYAGOO','2007-10-09')">Pavithren</div>
+<div class="card" onclick="showData('MUHAMMAD IZUWAN FIRDAUS BIN JAMALUDIN','2007-05-21')">Wan</div>
+<div class="card" onclick="showData('PRAVEEN JEGANNATHAN','2007-10-19')">Praveen</div>
+<div class="card" onclick="showData('ARAVIND RAJ A/L KANNAN THEVAR','2007-04-20')">Aravind</div>
+<div class="card" onclick="showData('DHACAIYANI A/P PANNIR SELVAM','2007-07-19')">Dhaca</div>
 </div>
 
+<button class="back-btn" onclick="showPage('page2')">⬅ BACK</button>
 </div>
 
 <!-- BATCH 3 -->
 <div id="b3" class="page">
-<h1 style="font-size:80px">BATCH 3</h1>
+<h1 style="font-size:70px">BATCH 3</h1>
 
 <div class="grid">
-<div class="card" onclick="showData('Nurhan','2003-03-03')">Nurhan</div>
-<div class="card" onclick="showData('Krish','2007-06-07')">Krish</div>
-<div class="card" onclick="showData('Yuvanesh','2006-11-22')">Yuvanesh</div>
-<div class="card" onclick="showData('Yugendiran','2003-01-01')">Yugendiran</div>
+<div class="card" onclick="showData('NURHAN HAZIQ BIN NAZAR','2003-03-03')">Nurhan</div>
+<div class="card" onclick="showData('KRISHNA A/L KAYSAVAN','2007-06-07')">Krish</div>
+<div class="card" onclick="showData('YUVANESH A/L VIVEKANATAN','2006-11-22')">Yuvanesh</div>
+<div class="card" onclick="showData('YUGENDIRAN A/L JAKANDIRAN','2003-01-01')">Yugendiran</div>
 </div>
 
+<button class="back-btn" onclick="showPage('page2')">⬅ BACK</button>
 </div>
 
 <!-- POPUP -->
 <div id="popup" class="popup">
   <div class="popup-box">
+    <p id="status">Scanning...</p>
+
+    <div class="bar">
+      <div id="scan"></div>
+    </div>
+
     <h2 id="p-name"></h2>
     <p id="p-birth"></p>
+
     <button onclick="closePopup()">CLOSE</button>
   </div>
 </div>
-
-<footer>
-<button onclick="showPage('page2')">⬅ BACK</button><br>
-© Happy Ng
-</footer>
 
 <script>
 
@@ -221,18 +241,6 @@ document.addEventListener("click",()=>{
  }
 });
 
-/* popup */
-function showData(name,birth){
- document.getElementById("popup").classList.add("active");
-
- typeText(document.getElementById("p-name"),name);
- typeText(document.getElementById("p-birth"),"Birthday: "+birth);
-}
-
-function closePopup(){
- document.getElementById("popup").classList.remove("active");
-}
-
 /* typing */
 function typeText(el,text){
  el.textContent="";
@@ -246,35 +254,76 @@ function typeText(el,text){
  t();
 }
 
-/* 背景 */
-const c=document.getElementById("bg");
-const ctx=c.getContext("2d");
+/* scanning system */
+function showData(name,birth){
+ let popup=document.getElementById("popup");
+ let scan=document.getElementById("scan");
+ let status=document.getElementById("status");
 
-c.width=window.innerWidth;
-c.height=window.innerHeight;
+ popup.classList.add("active");
+ scan.style.width="0%";
 
-let dots=[];
-for(let i=0;i<150;i++){
- dots.push({
-  x:Math.random()*c.width,
-  y:Math.random()*c.height
- });
+ let p=0;
+ let int=setInterval(()=>{
+  p+=10;
+  scan.style.width=p+"%";
+
+  if(p>=100){
+   clearInterval(int);
+   status.textContent="Data Loaded";
+
+   typeText(document.getElementById("p-name"),name);
+   typeText(document.getElementById("p-birth"),"DOB: "+birth);
+  }
+ },100);
+}
+
+function closePopup(){
+ document.getElementById("popup").classList.remove("active");
+}
+
+/* MATRIX 背景 */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = "0123456789";
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+
+const drops = [];
+for(let i=0;i<columns;i++){
+ drops[i] = Math.random()*canvas.height;
 }
 
 function draw(){
- ctx.fillStyle="black";
- ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle = "rgba(0,0,0,0.08)";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
 
- ctx.fillStyle="#00ff88";
- dots.forEach(d=>{
-  ctx.fillRect(d.x,d.y,2,2);
-  d.y+=0.5;
-  if(d.y>c.height)d.y=0;
- });
+ ctx.fillStyle = "#00ff88";
+ ctx.font = fontSize + "px monospace";
+
+ for(let i=0;i<drops.length;i++){
+  const text = chars[Math.floor(Math.random()*chars.length)];
+  ctx.fillText(text, i*fontSize, drops[i]);
+
+  drops[i] += fontSize;
+
+  if(drops[i] > canvas.height && Math.random() > 0.97){
+    drops[i] = 0;
+  }
+ }
 
  requestAnimationFrame(draw);
 }
 draw();
+
+window.addEventListener("resize",()=>{
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+});
 
 </script>
 
