@@ -32,10 +32,11 @@ body{
   height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:center;   
   align-items:center;
   text-align:center;
-
+  padding:20px;
+}
   /* 🔥 自动避开刘海 */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -51,8 +52,12 @@ body{
 
 /* glitch */
 .glitch{
-  font-size: clamp(40px, 8vw, 80px);
+  font-size: clamp(40px, 10vw, 70px);
   animation:glitch 1s infinite;
+}
+
+h1{
+  margin:10px 0;
 }
 @keyframes glitch{
   0%{text-shadow:3px 0 red,-3px 0 blue}
