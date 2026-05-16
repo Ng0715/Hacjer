@@ -90,6 +90,14 @@ body{
     }
 }
 
+.batch-container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:20px;
+    width:80%;
+    margin:auto;
+}
+
 /* 按钮 */
 button{
   padding:18px 40px;
@@ -195,11 +203,14 @@ env(safe-area-inset-bottom);
       onclick="showData('SITI FARIDAH BINTI SURATIN','20-06')">
       MISS IDA
   </h1>
+  </div>
+  
+  <div class="batch-container">
+<button onclick="showPage('b1')">BATCH 1</button>
+<button onclick="showPage('b2')">BATCH 2</button>
+<button onclick="showPage('b3')">BATCH 3</button>
+<button onclick="showPage('b4')">BATCH 4</button>
 
-  <button onclick="showPage('b1')">BATCH 1</button>
-  <button onclick="showPage('b2')">BATCH 2</button>
-  <button onclick="showPage('b3')">BATCH 3</button>
-  <button onclick="showPage('b4')">BATCH 4</button>
 </div>
 
 <!-- BATCH 1 -->
